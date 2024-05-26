@@ -6,9 +6,11 @@
 
 #define LIN_SERIAL_SPEED LIN_BAUDRATE_IBS_SENSOR /* Required by IBS Sensor */
 #define PIN_NSLP 23
+#define RX_PIN 16 /* UART 2 RX Pin is 16 on ESP32 NodeMCU*/
+#define TX_PIN 17 /* UART 2 TX Pin is 17 on ESP32 NodeMCU*/
 
 // utilize the TJA1020 by using UART2 for writing and reading Frames
-Lin_TJA1020 LinBus(2, LIN_SERIAL_SPEED, PIN_NSLP); // UART_nr, Baudrate, /SLP
+Lin_TJA1020 LinBus(2, LIN_SERIAL_SPEED, RX_PIN, TX_PIN, PIN_NSLP);
 
 // Hella IBS 200x "Sensor 2"
 IBS_Sensor BatSensor(2);
@@ -17,6 +19,12 @@ void setup()
 {
   // Serial represents Serial(0)
   Serial.begin(115200);
+  Serial.printf("Initializing");
+  for (int i=0; i < 60; i++)
+  {
+    Serial.print(".");
+    delay(1000);
+  }
 
   // configure slope rate
   Serial.print("configure low slope rate of TJA1020\n");
